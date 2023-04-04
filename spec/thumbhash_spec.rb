@@ -15,14 +15,19 @@ RSpec.describe Shrine::Plugins::Thumbhash do
     shrine_class
   end
 
-  def image
+  def jpeg_image
     File.open("#{__dir__}/fixtures/horse_silhouette_at_sunrise.jpg", binmode: true)
+  end
+
+  def png_image
+    File.open("#{__dir__}/fixtures/moon.png", binmode: true)
   end
 
   describe "ClassMethod" do
     describe "generate_thumbhash" do
       it "Shrine.generate_thumbhash returns thumbhash from image" do
-        expect(shrine_class.generate_thumbhash(image)).to eq "4igaZIp2iHiPeHeGd3d2hFAmCA"
+        expect(shrine_class.generate_thumbhash(jpeg_image)).to eq "4igaZIp2iHiPeHeGd3d2hFAmCA"
+        expect(shrine_class.generate_thumbhash(png_image)).to eq "IwiGBQA4AsyTWqnbZQZuU2QGB1d3iIB4WA"
       end
     end
   end
