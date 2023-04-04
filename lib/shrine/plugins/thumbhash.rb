@@ -20,7 +20,14 @@ class Shrine # :nodoc:
           image = ::Vips::Image.new_from_source(src, "")
           scale_factor = [100.fdiv(image.width), 100.fdiv(image.height)].min
           image = image.resize(scale_factor)
-          rgba_array = image.to_enum.flat_map { |line| line.flat_map { |rgb| rgb.push(255) } }
+          rgba_array = case image.bands
+                       when 3
+                         image.to_enum.flat_map { |line| line.flat_map { |rgb| rgb.push(255) } }
+                       when 4
+                         image.to_enum.flat_map(&:flatten)
+                       else
+                         raise "Unexpected bands: #{image.bands}"
+                       end
           thumb_hash_binary = ::ThumbHash.rgba_to_thumb_hash(
             image.width,
             image.height,
