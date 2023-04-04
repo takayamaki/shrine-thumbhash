@@ -16,24 +16,38 @@ class Shrine # :nodoc:
 
       module ClassMethods # :nodoc:
         def generate_thumbhash(io)
-          src = ::Vips::Source.new_from_descriptor(io.fileno)
-          image = ::Vips::Image.new_from_source(src, "")
-          scale_factor = [100.fdiv(image.width), 100.fdiv(image.height)].min
-          image = image.resize(scale_factor)
-          rgba_array = case image.bands
-                       when 3
-                         image.to_enum.flat_map { |line| line.flat_map { |rgb| rgb.push(255) } }
-                       when 4
-                         image.to_enum.flat_map(&:flatten)
-                       else
-                         raise "Unexpected bands: #{image.bands}"
-                       end
+          image = load_image(io)
+          image = resize_image(image)
+          rgba_array = repack_pixels_to_flattened_rgba_array(image)
           thumb_hash_binary = ::ThumbHash.rgba_to_thumb_hash(
             image.width,
             image.height,
             rgba_array
           )
           Base64.urlsafe_encode64(thumb_hash_binary, padding: false)
+        end
+
+        private
+
+        def load_image(io)
+          src = ::Vips::Source.new_from_descriptor(io.fileno)
+          ::Vips::Image.new_from_source(src, "")
+        end
+
+        def resize_image(image)
+          scale_factor = [100.fdiv(image.width), 100.fdiv(image.height)].min
+          image.resize(scale_factor)
+        end
+
+        def repack_pixels_to_flattened_rgba_array(image)
+          case image.bands
+          when 3
+            image.to_enum.flat_map { |line| line.flat_map { |rgb| rgb.push(255) } }
+          when 4
+            image.to_enum.flat_map(&:flatten)
+          else
+            raise "Unexpected bands: #{image.bands}"
+          end
         end
       end
     end
