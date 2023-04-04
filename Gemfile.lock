@@ -2,16 +2,26 @@ PATH
   remote: .
   specs:
     shrine-thumbhash (0.1.0)
+      ruby-vips (~> 2.0)
+      shrine (~> 3.0)
+      thumbhash (~> 0.0.1)
 
 GEM
   remote: https://rubygems.org/
   specs:
+    addressable (2.8.2)
+      public_suffix (>= 2.0.2, < 6.0)
     ast (2.4.2)
+    content_disposition (1.0.0)
     diff-lcs (1.5.0)
+    down (5.4.0)
+      addressable (~> 2.8)
+    ffi (1.15.5)
     json (2.6.3)
     parallel (1.22.1)
     parser (3.2.2.0)
       ast (~> 2.4.1)
+    public_suffix (5.0.1)
     rainbow (3.1.1)
     rake (13.0.6)
     regexp_parser (2.7.0)
@@ -42,6 +52,12 @@ GEM
     rubocop-ast (1.28.0)
       parser (>= 3.2.1.0)
     ruby-progressbar (1.13.0)
+    ruby-vips (2.1.4)
+      ffi (~> 1.12)
+    shrine (3.4.0)
+      content_disposition (~> 1.0)
+      down (~> 5.1)
+    thumbhash (0.0.1)
     unicode-display_width (2.4.2)
 
 PLATFORMS
