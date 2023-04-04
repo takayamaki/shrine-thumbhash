@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
 
   spec.summary = "Shrine plugin for generate Thumbhash from image attachments"
   spec.homepage = "https://github.com/takayamaki/shrine-thumbhash"
-  spec.required_ruby_version = ">= 2.6.0"
+  spec.required_ruby_version = ">= 2.6"
 
   spec.metadata["allowed_push_host"] = "https://rubygems.org"
 
