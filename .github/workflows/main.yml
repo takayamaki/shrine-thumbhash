@@ -22,7 +22,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - run: sudo apt install -y libvips-dev
+    - run: sudo apt install --no-install-recommends --no-install-suggests -y libvips-dev
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
