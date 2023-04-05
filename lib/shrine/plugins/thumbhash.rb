@@ -35,6 +35,8 @@ class Shrine # :nodoc:
         end
 
         def resize_image(image)
+          return image if image.width <= 100 && image.height <= 100
+
           scale_factor = [100.fdiv(image.width), 100.fdiv(image.height)].min
           image.resize(scale_factor)
         end
