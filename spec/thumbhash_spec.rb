@@ -25,9 +25,13 @@ RSpec.describe Shrine::Plugins::Thumbhash do
 
   describe "ClassMethod" do
     describe "generate_thumbhash" do
-      it "Shrine.generate_thumbhash returns thumbhash from image" do
-        expect(shrine_class.generate_thumbhash(jpeg_image)).to eq "4igaZIp2iHiPeHeGd3d2hFAmCA"
-        expect(shrine_class.generate_thumbhash(png_image)).to eq "IwiGBQA4AsyTWqnbZQZuU2QGB1d3iIB4WA"
+      it "Shrine.generate_thumbhash returns thumbhash from image as binary" do
+        aggregate_failures do
+          expect(Base64.urlsafe_encode64(shrine_class.generate_thumbhash(jpeg_image), padding: false))
+            .to eq "4igaZIp2iHiPeHeGd3d2hFAmCA"
+          expect(Base64.urlsafe_encode64(shrine_class.generate_thumbhash(png_image), padding: false))
+            .to eq "IwiGBQA4AsyTWqnbZQZuU2QGB1d3iIB4WA"
+        end
       end
     end
   end

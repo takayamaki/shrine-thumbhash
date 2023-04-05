@@ -19,12 +19,11 @@ class Shrine # :nodoc:
           image = load_image(io)
           image = resize_image(image)
           rgba_array = repack_pixels_to_flattened_rgba_array(image)
-          thumb_hash_binary = ::ThumbHash.rgba_to_thumb_hash(
+          ::ThumbHash.rgba_to_thumb_hash(
             image.width,
             image.height,
             rgba_array
           )
-          Base64.urlsafe_encode64(thumb_hash_binary, padding: false)
         end
 
         private
