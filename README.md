@@ -1,8 +1,6 @@
 # Shrine::Thumbhash
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/shrine/thumbhash`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Shrine plugin for generate Thumbhash from image attachments.
 
 ## Installation
 
@@ -14,9 +12,54 @@ If bundler is not being used to manage dependencies, install the gem by executin
 
     $ gem install shrine-thumbhash
 
+## Requirements
+- [ruby-vips gem](https://rubygems.org/gems/ruby-vips) (default or when you specify `:ruby_vips` to image_loader option)
+
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+require "shrine"
+require "shrine/storage/memory"
+require "shrine/plugins/thumbhash"
+
+Shrine.plugin :thumbhash
+Shrine.storages[:store] = Shrine::Storage::Memory.new
+uploader = Shrine.new(:store)
+
+image = File.open("path/to/image.jpg", binmode: true)
+uploaded_file = uploader.upload(image)
+
+uploaded_file.thumbhash
+# => Base64 encoded thumbhash such as "YJqGPQw7sFlslqhFafSE+Q6oJ1h2iHB2Rw=="
+uploaded_file.thumbhash_urlsafe
+# => URLsafe Base64 encoded thumbhash such as "YJqGPQw7sFlslqhFafSE-Q6oJ1h2iHB2Rw=="
+```
+
+## Options
+
+### padding
+When specify false, thumbhash will be without padding.
+
+Default: true
+```ruby
+Shrine.plugin :thumbhash, padding: false
+ ... # omit
+uploaded_file.thumbhash
+# => Base64 encoded thumbhash without padding such as "YJqGPQw7sFlslqhFafSE+Q6oJ1h2iHB2Rw"
+uploaded_file.thumbhash_urlsafe
+# => URLsafe Base64 encoded thumbhash without padding such as "YJqGPQw7sFlslqhFafSE-Q6oJ1h2iHB2Rw"
+```
+
+### image_loader
+A ruby object be used for loading and resizeing image.  
+When you choose from our implementations, you can specify them by Symbol.
+
+- `:ruby_vips`
+
+Default: :ruby_vips
+
+If you want to use something other than our implementations, you can implement it yourself.  
+See `lib/shrine/plugins/image_loader/ruby_vips.rb`.
 
 ## Development
 
@@ -26,4 +69,4 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/shrine-thumbhash.
+Bug reports and pull requests are welcome on GitHub at https://github.com/takayamaki/shrine-thumbhash.
