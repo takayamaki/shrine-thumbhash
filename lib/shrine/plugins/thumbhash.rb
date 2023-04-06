@@ -61,6 +61,16 @@ class Shrine # :nodoc:
                        })
         end
       end
+
+      module FileMethods # :nodoc:
+        def thumbhash
+          metadata["thumbhash"]
+        end
+
+        def thumbhash_urlsafe
+          metadata["thumbhash_urlsafe"]
+        end
+      end
     end
 
     register_plugin(:thumbhash, Thumbhash)
