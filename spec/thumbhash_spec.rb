@@ -51,4 +51,17 @@ RSpec.describe Shrine::Plugins::Thumbhash do # rubocop:disable Metrics/BlockLeng
       end
     end
   end
+
+  describe "FileMethod" do
+    it "UploadedFile can return thumbhash and thumbhash_urlsafe by same named method" do
+      shrine_class.storages[:store] = Shrine::Storage::Memory.new
+      uploader_class = shrine_class.new(:store)
+      uploaded_file = uploader_class.upload(jpeg_image)
+
+      aggregate_failures do
+        expect(uploaded_file.thumbhash).to eq("4igaZIp2iHiPeHeGd3d2hFAmCA==")
+        expect(uploaded_file.thumbhash_urlsafe).to eq("4igaZIp2iHiPeHeGd3d2hFAmCA==")
+      end
+    end
+  end
 end
