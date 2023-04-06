@@ -20,10 +20,10 @@ class Shrine # :nodoc:
       def self.configure_image_loader(opts)
         case opts[:image_loader]
         when :mini_magick
-          require_relative "image_loader/mini_magick"
+          require_relative "thumbhash/image_loader/mini_magick"
           opts[:image_loader] = Shrine::Plugins::Thumbhash::ImageLoader::MiniMagick
         else
-          require_relative "image_loader/ruby_vips"
+          require_relative "thumbhash/image_loader/ruby_vips"
           opts[:image_loader] = Shrine::Plugins::Thumbhash::ImageLoader::RubyVips
         end
       end
