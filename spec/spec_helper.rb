@@ -12,4 +12,12 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
+
+  def jpeg_image
+    File.open("#{__dir__}/fixtures/horse_silhouette_at_sunrise.jpg", binmode: true)
+  end
+
+  def png_image
+    File.open("#{__dir__}/fixtures/moon.png", binmode: true)
+  end
 end

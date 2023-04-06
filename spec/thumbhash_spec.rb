@@ -16,14 +16,6 @@ RSpec.describe Shrine::Plugins::Thumbhash do # rubocop:disable Metrics/BlockLeng
     shrine_class
   end
 
-  def jpeg_image
-    File.open("#{__dir__}/fixtures/horse_silhouette_at_sunrise.jpg", binmode: true)
-  end
-
-  def png_image
-    File.open("#{__dir__}/fixtures/moon.png", binmode: true)
-  end
-
   describe "ClassMethod" do
     describe "generate_thumbhash" do
       it "Shrine.generate_thumbhash returns thumbhash from image as binary" do
