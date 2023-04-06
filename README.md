@@ -14,6 +14,7 @@ If bundler is not being used to manage dependencies, install the gem by executin
 
 ## Requirements
 - [ruby-vips gem](https://rubygems.org/gems/ruby-vips) (default or when you specify `:ruby_vips` to image_loader option)
+- [mini_magick gem](https://rubygems.org/gems/mini_magick) (When you specify `:mini_magick` to image_loader option)
 
 ## Usage
 
@@ -40,7 +41,7 @@ uploaded_file.thumbhash_urlsafe
 ### padding
 When specify false, thumbhash will be without padding.
 
-Default: true
+Default: `true`
 ```ruby
 Shrine.plugin :thumbhash, padding: false
  ... # omit
@@ -55,8 +56,9 @@ A ruby object be used for loading and resizeing image.
 When you choose from our implementations, you can specify them by Symbol.
 
 - `:ruby_vips`
+- `:mini_magick`
 
-Default: :ruby_vips
+Default: `:ruby_vips`
 
 If you want to use something other than our implementations, you can implement it yourself.  
 See `lib/shrine/plugins/image_loader/ruby_vips.rb`.
