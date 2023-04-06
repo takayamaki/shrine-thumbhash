@@ -2,55 +2,37 @@
 
 require "shrine"
 require "thumbhash"
-require "ruby-vips"
 
 class Shrine # :nodoc:
   module Plugins # :nodoc:
     module Thumbhash # :nodoc:
       DEFAULT_OPTIONS = {
-        padding: true
+        padding: true,
+        image_loader: :ruby_vips
       }.freeze
 
       def self.configure(uploader, **opts)
         uploader.opts[:thumbhash] ||= DEFAULT_OPTIONS.dup
         uploader.opts[:thumbhash].merge!(opts)
+        configure_image_loader(uploader.opts[:thumbhash]) if uploader.opts[:thumbhash][:image_loader_class].nil?
+      end
+
+      def self.configure_image_loader(opts)
+        return unless opts[:image_loader] == :ruby_vips
+
+        require_relative "image_loader/ruby_vips"
+        opts[:image_loader] = Shrine::Plugins::Thumbhash::ImageLoader::RubyVips
       end
 
       module ClassMethods # :nodoc:
         def generate_thumbhash(io)
-          image = load_image(io)
-          image = resize_image(image)
-          rgba_array = repack_pixels_to_flattened_rgba_array(image)
+          image = opts[:thumbhash][:image_loader].call(io)
+
           ::ThumbHash.rgba_to_thumb_hash(
             image.width,
             image.height,
-            rgba_array
+            image.pixels
           )
-        end
-
-        private
-
-        def load_image(io)
-          src = ::Vips::Source.new_from_descriptor(io.fileno)
-          ::Vips::Image.new_from_source(src, "")
-        end
-
-        def resize_image(image)
-          return image if image.width <= 100 && image.height <= 100
-
-          scale_factor = [100.fdiv(image.width), 100.fdiv(image.height)].min
-          image.resize(scale_factor)
-        end
-
-        def repack_pixels_to_flattened_rgba_array(image)
-          case image.bands
-          when 3
-            image.to_enum.flat_map { |line| line.flat_map { |rgb| rgb.push(255) } }
-          when 4
-            image.to_enum.flat_map(&:flatten)
-          else
-            raise "Unexpected bands: #{image.bands}"
-          end
         end
       end
 
