@@ -51,6 +51,16 @@ class Shrine # :nodoc:
           end
         end
       end
+
+      module InstanceMethods # :nodoc:
+        def extract_metadata(io, **options)
+          thumbhash = self.class.generate_thumbhash(io)
+          super.merge!({
+                         "thumbhash" => Base64.strict_encode64(thumbhash),
+                         "thumbhash_urlsafe" => Base64.urlsafe_encode64(thumbhash)
+                       })
+        end
+      end
     end
 
     register_plugin(:thumbhash, Thumbhash)
