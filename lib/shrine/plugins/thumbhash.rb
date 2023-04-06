@@ -7,7 +7,9 @@ require "ruby-vips"
 class Shrine # :nodoc:
   module Plugins # :nodoc:
     module Thumbhash # :nodoc:
-      DEFAULT_OPTIONS = {}.freeze
+      DEFAULT_OPTIONS = {
+        padding: true
+      }.freeze
 
       def self.configure(uploader, **opts)
         uploader.opts[:thumbhash] ||= DEFAULT_OPTIONS.dup
@@ -55,10 +57,23 @@ class Shrine # :nodoc:
       module InstanceMethods # :nodoc:
         def extract_metadata(io, **options)
           thumbhash = self.class.generate_thumbhash(io)
-          super.merge!({
-                         "thumbhash" => Base64.strict_encode64(thumbhash),
-                         "thumbhash_urlsafe" => Base64.urlsafe_encode64(thumbhash)
-                       })
+          super.merge!(encode_thumbhash_as_base64(thumbhash))
+        end
+
+        private
+
+        def encode_thumbhash_as_base64(thumbhash)
+          if self.class.opts[:thumbhash][:padding]
+            {
+              "thumbhash" => Base64.strict_encode64(thumbhash),
+              "thumbhash_urlsafe" => Base64.urlsafe_encode64(thumbhash)
+            }
+          else
+            {
+              "thumbhash" => Base64.strict_encode64(thumbhash).gsub!("=", ""),
+              "thumbhash_urlsafe" => Base64.urlsafe_encode64(thumbhash, padding: false)
+            }
+          end
         end
       end
 
