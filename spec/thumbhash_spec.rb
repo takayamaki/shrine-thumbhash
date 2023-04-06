@@ -2,9 +2,10 @@
 
 require "bundler/setup"
 require "shrine"
+require "shrine/storage/memory"
 require "shrine/plugins/thumbhash"
 
-RSpec.describe Shrine::Plugins::Thumbhash do
+RSpec.describe Shrine::Plugins::Thumbhash do # rubocop:disable Metrics/BlockLength
   it "has a version number" do
     expect(Shrine::Plugins::Thumbhash::VERSION).not_to be_nil
   end
@@ -31,6 +32,21 @@ RSpec.describe Shrine::Plugins::Thumbhash do
             .to eq "4igaZIp2iHiPeHeGd3d2hFAmCA"
           expect(Base64.urlsafe_encode64(shrine_class.generate_thumbhash(png_image), padding: false))
             .to eq "IwiGBQA4AsyTWqnbZQZuU2QGB1d3iIB4WA"
+        end
+      end
+    end
+  end
+
+  describe "InstanceMethod" do
+    describe "extract_metadata" do
+      it "UploadedFile has thumbhash and thumbhash_urlsafe" do
+        shrine_class.storages[:store] = Shrine::Storage::Memory.new
+        uploader_class = shrine_class.new(:store)
+        uploaded_file = uploader_class.upload(jpeg_image)
+
+        aggregate_failures do
+          expect(uploaded_file.metadata["thumbhash"]).to eq("4igaZIp2iHiPeHeGd3d2hFAmCA==")
+          expect(uploaded_file.metadata["thumbhash_urlsafe"]).to eq("4igaZIp2iHiPeHeGd3d2hFAmCA==")
         end
       end
     end
