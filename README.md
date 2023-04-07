@@ -1,6 +1,6 @@
 # Shrine::Thumbhash
 
-Shrine plugin for generate Thumbhash from image attachments.
+Shrine plugin for generate [Thumbhash](https://evanw.github.io/thumbhash/) from image attachments.
 
 ## Installation
 
@@ -59,9 +59,12 @@ When you choose from our implementations, you can specify them by Symbol.
 - `:mini_magick`
 
 Default: `:ruby_vips`
+```ruby
+Shrine.plugin :thumbhash, image_loader: :mini_magick
+```
 
 If you want to use something other than our implementations, you can implement it yourself.  
-See `lib/shrine/plugins/image_loader/ruby_vips.rb`.
+See `lib/shrine/plugins/thumbhash/image_loader/ruby_vips.rb`.
 
 ## Development
 
