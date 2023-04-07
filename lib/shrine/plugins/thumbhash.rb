@@ -6,6 +6,10 @@ require "thumbhash"
 class Shrine # :nodoc:
   module Plugins # :nodoc:
     module Thumbhash # :nodoc:
+      IMAGE_LOADER_CHOICES = [
+        :ruby_vips,
+        :mini_magick
+      ].freeze
       DEFAULT_OPTIONS = {
         padding: true,
         image_loader: :ruby_vips
@@ -14,7 +18,11 @@ class Shrine # :nodoc:
       def self.configure(uploader, **opts)
         uploader.opts[:thumbhash] ||= DEFAULT_OPTIONS.dup
         uploader.opts[:thumbhash].merge!(opts)
-        configure_image_loader(uploader.opts[:thumbhash]) if uploader.opts[:thumbhash][:image_loader_class].nil?
+        image_loader_option = uploader.opts[:thumbhash][:image_loader]
+
+        return unless IMAGE_LOADER_CHOICES.include?(image_loader_option)
+
+        configure_image_loader(uploader.opts[:thumbhash])
       end
 
       def self.configure_image_loader(opts)

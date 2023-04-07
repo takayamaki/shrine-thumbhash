@@ -6,7 +6,7 @@ require "shrine/storage/memory"
 require "shrine/plugins/thumbhash"
 require "shrine/plugins/thumbhash/image_loader/ruby_vips"
 
-RSpec.describe Shrine::Plugins::Thumbhash::ImageLoader::RubyVips do
+RSpec.describe Shrine::Plugins::Thumbhash::ImageLoader::RubyVips do # rubocop:disable Metrics/BlockLength
   it "Thumbhash::ImageLoader::RubyVips.call returns a Ruby object that has width, height and pixels" do
     image = Shrine::Plugins::Thumbhash::ImageLoader::RubyVips.call(jpeg_image)
     aggregate_failures do
@@ -30,5 +30,15 @@ RSpec.describe Shrine::Plugins::Thumbhash::ImageLoader::RubyVips do
       expect(Base64.urlsafe_encode64(shrine_class.generate_thumbhash(png_image), padding: false))
         .to eq "IwiGBQA4AsyTWqnbZQZuU2QGB1d3iIB4WA"
     end
+  end
+
+  it "ImageLoader::RubyVips is default of image_loader option" do
+    shrine_class = Class.new(Shrine)
+    shrine_class.class_eval do
+      plugin :thumbhash
+    end
+
+    expect(shrine_class.opts[:thumbhash][:image_loader])
+      .to eq(Shrine::Plugins::Thumbhash::ImageLoader::RubyVips)
   end
 end
