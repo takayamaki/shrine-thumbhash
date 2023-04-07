@@ -11,6 +11,11 @@ on:
       - 'shrine-thumbhash.gemspec'
 
   pull_request:
+    paths:
+      - 'lib/**'
+      - 'spec/**'
+      - 'Gemfile'
+      - 'shrine-thumbhash.gemspec'
 
 jobs:
   build:
