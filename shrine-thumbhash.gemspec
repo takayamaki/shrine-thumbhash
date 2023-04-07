@@ -7,6 +7,7 @@ Gem::Specification.new do |spec|
   spec.version = Shrine::Plugins::Thumbhash::VERSION
   spec.authors = ["takayamaki / fusagiko"]
   spec.email = ["24884114+takayamaki@users.noreply.github.com"]
+  spec.license = "MIT"
 
   spec.summary = "Shrine plugin for generate Thumbhash from image attachments"
   spec.homepage = "https://github.com/takayamaki/shrine-thumbhash"
