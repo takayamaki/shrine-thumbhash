@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
 require "bundler/setup"
-require "shrine"
-require "shrine/storage/memory"
-require "shrine/plugins/thumbhash"
 require "shrine/plugins/thumbhash/image_loader/mini_magick"
 
 RSpec.describe Shrine::Plugins::Thumbhash::ImageLoader::MiniMagick do
