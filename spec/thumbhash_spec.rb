@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 require "bundler/setup"
-require "shrine"
 require "shrine/storage/memory"
-require "shrine/plugins/thumbhash"
 
 RSpec.describe Shrine::Plugins::Thumbhash do # rubocop:disable Metrics/BlockLength
   it "has a version number" do
